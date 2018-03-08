@@ -39,17 +39,9 @@ bool IPAddr::operator<(const IPAddr &other) const {
   return false;
 }
 
-bool IPAddr::operator>(const IPAddr &other) const { return (*this < other); }
-
-bool IPAddr::operator<=(const IPAddr &other) const { return !(*this > other); }
-
-bool IPAddr::operator>=(const IPAddr &other) const { return !(*this < other); }
-
 bool IPAddr::operator==(const IPAddr &other) const {
   for (auto i = container_type::size_type{0}; i < _addr.size(); i++)
     if (_addr[i] != other._addr[i])
       return false;
   return true;
 }
-
-bool IPAddr::operator!=(const IPAddr &other) const { return !(*this == other); }

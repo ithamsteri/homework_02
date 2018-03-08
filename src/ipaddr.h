@@ -28,17 +28,17 @@ struct IPAddr {
   // Получение строкового представления адреса
   std::string str() const;
 
-  bool operator<(const IPAddr &) const;
-  bool operator>(const IPAddr &) const;
-  bool operator<=(const IPAddr &) const;
-  bool operator>=(const IPAddr &) const;
-  
-  bool operator==(const IPAddr &) const;
-  bool operator!=(const IPAddr &) const;
+  bool operator<(const IPAddr &other) const;
+  bool operator>(const IPAddr &other) const { return (*this < other); };
+  bool operator<=(const IPAddr &other) const { return !(*this > other); };
+  bool operator>=(const IPAddr &other) const { return !(*this < other); };
+
+  bool operator==(const IPAddr &other) const;
+  bool operator!=(const IPAddr &other) const { return !(*this == other); };
 
   internal_type &operator[](std::size_t idx) { return _addr[idx]; };
   external_type operator[](std::size_t idx) const { return _addr[idx]; };
-  
+
   constexpr container_type::size_type size() const { return _addr.size(); }
 
 private:
