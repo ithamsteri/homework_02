@@ -22,46 +22,55 @@ option(BUILD_BENCHMARKS "Build benchmarking suite" ON)
 
 # configure directories
 set(SOURCE_PATH "${PROJECT_SOURCE_DIR}/src")
+set(TEST_PATH "${PROJECT_SOURCE_DIR}/tests")
 
 # we need boost for unit test
 find_package(Boost COMPONENTS unit_test_framework REQUIRED)
 
 # make executable file for application
 add_executable(ip_filter
-    ${SOURCE_PATH}/ip_filter.cpp
-    ${SOURCE_PATH}/split.cpp
+    ${SOURCE_PATH}/main.cpp
+    ${SOURCE_PATH}/ipaddr.cpp
 )
-add_executable(split_test
-    ${SOURCE_PATH}/split.test.cpp
-    ${SOURCE_PATH}/split.cpp
+add_executable(filter_test
+    ${TEST_PATH}/filter.test.cpp
+    ${SOURCE_PATH}/io.h
+    ${SOURCE_PATH}/ipaddr.h
+    ${SOURCE_PATH}/ipaddr.cpp
+    ${SOURCE_PATH}/filter.h
 )
 
-set_target_properties(ip_filter split_test PROPERTIES
+set_target_properties(ip_filter filter_test PROPERTIES
     CXX_STANDARD 14
     CXX_STANDARD_REQUIRED ON
 )
 
 # BOOST_TEST_DYN_LINK - Define this flag to link against
 # the Unit Test Framework shared library
-set_target_properties(split_test PROPERTIES
+set_target_properties(filter_test PROPERTIES
   COMPILE_DEFINITIONS BOOST_TEST_DYN_LINK
-  INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIR}
+  INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIRS}
 )
+target_include_directories(filter_test PUBLIC src)
 
-target_link_libraries(split_test
+target_link_libraries(filter_test
     ${Boost_LIBRARIES}
 )
+
+# Copy datatest for tests
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/tests/testdata.tsv
+     DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
 # If enabled option BUILD_BENCHMARKS:
 if (BUILD_BENCHMARKS)
     find_package(benchmark QUIET)
     if (benchmark_FOUND)
         message("-- Found Google benchmark library. Building benchmarks.")
-        add_executable(split_benchmark
-            ${SOURCE_PATH}/split.bench.cpp
-            ${SOURCE_PATH}/split.cpp
-        )
-        target_link_libraries(split_benchmark benchmark::benchmark)
+        #add_executable(split_benchmark
+        #    ${SOURCE_PATH}/split.bench.cpp
+        #    ${SOURCE_PATH}/split.cpp
+        #)
+        #target_link_libraries(split_benchmark benchmark::benchmark)
     else()
         message("-- Failed to find Google benchmark library, disabling build of benchmarks.")
         update_cache_variable(BUILD_BENCHMARKS OFF)
@@ -81,4 +90,4 @@ include(CPack)
 
 enable_testing()
 
-add_test(split_test split_test)
+add_test(Filter filter_test)
