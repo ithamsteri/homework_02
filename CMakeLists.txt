@@ -34,25 +34,30 @@ add_executable(ip_filter
 )
 add_executable(filter_test
     ${TEST_PATH}/filter.test.cpp
-    ${SOURCE_PATH}/io.h
-    ${SOURCE_PATH}/ipaddr.h
     ${SOURCE_PATH}/ipaddr.cpp
-    ${SOURCE_PATH}/filter.h
+)
+add_executable(ipaddr_test
+    ${TEST_PATH}/ipaddr.test.cpp
+    ${SOURCE_PATH}/ipaddr.cpp
 )
 
-set_target_properties(ip_filter filter_test PROPERTIES
+set_target_properties(ip_filter ipaddr_test filter_test PROPERTIES
     CXX_STANDARD 14
     CXX_STANDARD_REQUIRED ON
 )
 
 # BOOST_TEST_DYN_LINK - Define this flag to link against
 # the Unit Test Framework shared library
-set_target_properties(filter_test PROPERTIES
+set_target_properties(ipaddr_test filter_test PROPERTIES
   COMPILE_DEFINITIONS BOOST_TEST_DYN_LINK
   INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIRS}
 )
+target_include_directories(ipaddr_test PUBLIC src)
 target_include_directories(filter_test PUBLIC src)
 
+target_link_libraries(ipaddr_test
+    ${Boost_LIBRARIES}
+)
 target_link_libraries(filter_test
     ${Boost_LIBRARIES}
 )
@@ -90,4 +95,5 @@ include(CPack)
 
 enable_testing()
 
+add_test(IPAddr ipaddr_test)
 add_test(Filter filter_test)

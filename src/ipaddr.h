@@ -29,8 +29,8 @@ struct IPAddr {
   std::string str() const;
 
   bool operator<(const IPAddr &other) const;
-  bool operator>(const IPAddr &other) const { return (*this < other); };
-  bool operator<=(const IPAddr &other) const { return !(*this > other); };
+  bool operator>(const IPAddr &other) const { return !(*this <= other); };
+  bool operator<=(const IPAddr &other) const { return *this < other || *this == other; };
   bool operator>=(const IPAddr &other) const { return !(*this < other); };
 
   bool operator==(const IPAddr &other) const;
