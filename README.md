@@ -18,11 +18,12 @@
 
 ### Установка пакета
 
-Для Ubuntu Xenial нужно сделать следующее:
+Для Ubuntu Trusty нужно сделать следующее:
 
 ```shell
-echo "deb https://hamsterisoft.bintray.com/apt-repo xenial main" | sudo tee -a /etc/apt/sources.list
-apt-get update && apt-get install ipfilter
+echo "deb http://ppa.launchpad.net/ubuntu-toolchain-r/test/ubuntu trusty main" | sudo tee -a /etc/apt/sources.list
+echo "deb http://hamsterisoft.bintray.com/apt-repo xenial main" | sudo tee -a /etc/apt/sources.list
+apt-get update && apt-get install libstdc++6 ipfilter
 ```
 
 И можно пользоваться:
