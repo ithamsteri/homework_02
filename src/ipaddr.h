@@ -19,7 +19,8 @@ struct IPAddr {
   // Для хранения данных внутри класса будем использовать обёртку для массивов.
   using container_type = std::array<internal_type, 4>;
 
-  // Конструктор адреса из строки
+  // Конструктор адреса из строки, который может бросать исключение:
+  // std::invalid_argument, если был передан не корректный IP адрес.
   explicit IPAddr(const std::string &);
   constexpr IPAddr(const IPAddr &other) = default;
   IPAddr &operator=(const IPAddr &other) = default;
@@ -30,7 +31,9 @@ struct IPAddr {
 
   bool operator<(const IPAddr &other) const;
   bool operator>(const IPAddr &other) const { return !(*this <= other); };
-  bool operator<=(const IPAddr &other) const { return *this < other || *this == other; };
+  bool operator<=(const IPAddr &other) const {
+    return *this < other || *this == other;
+  };
   bool operator>=(const IPAddr &other) const { return !(*this < other); };
 
   bool operator==(const IPAddr &other) const;

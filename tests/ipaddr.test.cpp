@@ -8,6 +8,7 @@
 #include <array>
 #include <boost/test/unit_test.hpp>
 #include <map>
+#include <stdexcept>
 #include <string>
 #include <vector>
 
@@ -15,6 +16,23 @@ using ippair = std::array<IPAddr, 2>;
 using ipvec = std::array<int, 4>;
 
 BOOST_AUTO_TEST_SUITE(ipaddr_test_basic)
+
+BOOST_AUTO_TEST_CASE(not_correct_ip) {
+  std::vector<std::string> addresses{
+      "A.2.3.4",        "1.A.3.4",        "1.2.A.4",        "1.2.3.A",
+      "10000000.2.3.4", "1.20000000.3.4", "1.2.30000000.4", "1.2.3.40000000",
+      "666.2.3.4",      "1.666.3.4",      "1.2.666.4",      "1.2.3.666",
+      "-1.2.3.4",       "1.-2.3.4",       "1.2.-3.4",       "1.2.3.-4"};
+
+  // NOTE: https://stackoverflow.com/questions/2372027/
+  // This occurs because BOOST_CHECK_THROW is a macro, and `IPAddr(address)`
+  // is being expanded to a statement. The compiler sees this statement and
+  // interprets it as a variable declaration `IPAddr address;` which requires
+  // a default constructor.
+  for (const auto &address : addresses) {
+    BOOST_CHECK_THROW(auto _ = IPAddr(address), std::invalid_argument);
+  }
+}
 
 BOOST_AUTO_TEST_CASE(access_test) {
   auto address = IPAddr("1.2.3.4");
@@ -42,9 +60,9 @@ BOOST_AUTO_TEST_CASE(access_mutable_test) {
 }
 
 BOOST_AUTO_TEST_CASE(string_test) {
-  auto addresses =
-      std::vector<std::string>{"0.0.0.0",     "255.255.255.255", "127.0.0.1",
-                               "10.10.10.10", "1.2.3.4",         "8.8.4.4"};
+  std::vector<std::string> addresses{"0.0.0.0",   "255.255.255.255",
+                                     "127.0.0.1", "10.10.10.10",
+                                     "1.2.3.4",   "8.8.4.4"};
 
   BOOST_TEST_MESSAGE("Checking IPAddr string conversion");
 
