@@ -18,11 +18,17 @@
 
 ### Установка пакета
 
-Для Debian Stretch нужно сделать следующее:
+Для Ubuntu Trusty нужно сделать следующее:
 
 ```shell
-echo "deb https://hamsterisoft.bintray.com/apt-repo stretch main" | sudo tee -a /etc/apt/sources.list
+echo "deb https://hamsterisoft.bintray.com/apt-repo trusty main" | sudo tee -a /etc/apt/sources.list
 apt-get update && apt-get install ipfilter
+```
+
+И можно пользоваться:
+
+```
+cat datafile.tsv | ip_filter | md5sum
 ```
 
 ### Генерация сборки
