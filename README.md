@@ -18,16 +18,16 @@
 
 ### Установка пакета
 
-Для Ubuntu Trusty нужно сделать следующее:
+Для Ubuntu Xenial нужно сделать следующее:
 
 ```shell
-echo "deb https://hamsterisoft.bintray.com/apt-repo trusty main" | sudo tee -a /etc/apt/sources.list
+echo "deb https://hamsterisoft.bintray.com/apt-repo xenial main" | sudo tee -a /etc/apt/sources.list
 apt-get update && apt-get install ipfilter
 ```
 
 И можно пользоваться:
 
-```
+```shell
 cat datafile.tsv | ip_filter | md5sum
 ```
 
@@ -57,15 +57,18 @@ ctest -V
 
 ### Запуск теста производительности
 
-![bench result](https://github.com/ithamsteri/homework_02/raw/master/bench.png "Benchmark results")
+![bench result](https://github.com/ithamsteri/homework_02/raw/master/bench.png
+"Benchmark results")
 
 Для компиляции тестов производительности нужно установить
 [Google Benchmark](https://github.com/google/benchmark) библиотеку. Опция
-сборки тестов производительности включена. Для запуска тестов
-производительности нужно собрать проект и запустить тесты:
+сборки тестов производительности по-умолчанию включена. Если CMake не найдет
+библиотеку Google Benchmark, то тогда тесты производительности не будут собраны
+и запущены.
 
+Тесты производительности запускаются совместно с модульными тестами командой:
+
+```shell
+ctest -V
 ```
-cmake -H. -BBuild
-cd Build
-./filter_benchmark
-```
+
