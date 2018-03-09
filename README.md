@@ -51,6 +51,8 @@ ctest -V
 
 ### Запуск теста производительности
 
+![bench result](https://github.com/ithamsteri/homework_02/raw/master/bench.png "Benchmark results")
+
 Для компиляции тестов производительности нужно установить
 [Google Benchmark](https://github.com/google/benchmark) библиотеку. Опция
 сборки тестов производительности включена. Для запуска тестов
@@ -59,5 +61,5 @@ ctest -V
 ```
 cmake -H. -BBuild
 cd Build
-./split_benchmark
+./filter_benchmark
 ```

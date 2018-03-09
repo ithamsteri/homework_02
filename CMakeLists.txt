@@ -62,20 +62,26 @@ target_link_libraries(filter_test
     ${Boost_LIBRARIES}
 )
 
-# Copy datatest for tests
-file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/tests/testdata.tsv
-     DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+# Copy datatest for tests and benchmarks
+file(
+    COPY
+        ${CMAKE_CURRENT_SOURCE_DIR}/tests/benchdata.tsv
+        ${CMAKE_CURRENT_SOURCE_DIR}/tests/testdata.tsv
+    DESTINATION
+        ${CMAKE_CURRENT_BINARY_DIR}
+)
 
 # If enabled option BUILD_BENCHMARKS:
 if (BUILD_BENCHMARKS)
     find_package(benchmark QUIET)
     if (benchmark_FOUND)
         message("-- Found Google benchmark library. Building benchmarks.")
-        #add_executable(split_benchmark
-        #    ${SOURCE_PATH}/split.bench.cpp
-        #    ${SOURCE_PATH}/split.cpp
-        #)
-        #target_link_libraries(split_benchmark benchmark::benchmark)
+        add_executable(filter_benchmark
+            ${TEST_PATH}/filter.bench.cpp
+            ${SOURCE_PATH}/ipaddr.cpp
+        )
+        target_include_directories(filter_benchmark PUBLIC src)
+        target_link_libraries(filter_benchmark benchmark::benchmark)
     else()
         message("-- Failed to find Google benchmark library, disabling build of benchmarks.")
         update_cache_variable(BUILD_BENCHMARKS OFF)
@@ -97,3 +103,7 @@ enable_testing()
 
 add_test(IPAddr ipaddr_test)
 add_test(Filter filter_test)
+
+if (BUILD_BENCHMARKS)
+    add_test(FilterBech filter_benchmark)
+endif()
