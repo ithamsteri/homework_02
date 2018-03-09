@@ -21,4 +21,4 @@ deploy:
   provider: script
   skip_cleanup: true
   script:
-  - curl -T ipfilter-0.0.$TRAVIS_BUILD_NUMBER-Linux.deb -uithamsteri:$BINTRAY_API_KEY "https://api.bintray.com/content/hamsterisoft/apt-repo/ipfilter/0.0.$TRAVIS_BUILD_NUMBER/pool/main/i/ipfilter-0.0.$TRAVIS_BUILD_NUMBER-Linux.deb;deb_distribution=trusty;deb_component=main;deb_architecture=amd64;publish=1"
+  - curl -T ipfilter-0.0.$TRAVIS_BUILD_NUMBER-Linux.deb -uithamsteri:$BINTRAY_API_KEY "https://api.bintray.com/content/hamsterisoft/apt-repo/ip_filter/0.0.$TRAVIS_BUILD_NUMBER/pool/main/i/ip_filter-0.0.$TRAVIS_BUILD_NUMBER-Linux.deb;deb_distribution=trusty;deb_component=main;deb_architecture=amd64;publish=1"

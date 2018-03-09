@@ -22,8 +22,10 @@
 
 ```shell
 echo "deb http://ppa.launchpad.net/ubuntu-toolchain-r/test/ubuntu trusty main" | sudo tee -a /etc/apt/sources.list
-echo "deb http://hamsterisoft.bintray.com/apt-repo xenial main" | sudo tee -a /etc/apt/sources.list
-apt-get update && apt-get install libstdc++6 ipfilter
+echo "deb http://hamsterisoft.bintray.com/apt-repo trusty main" | sudo tee -a /etc/apt/sources.list
+sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 1E9377A2BA9EF27F
+sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 379CE192D401AB61
+sudo apt-get update && sudo apt-get install libstdc++6 ip_filter
 ```
 
 И можно пользоваться:
