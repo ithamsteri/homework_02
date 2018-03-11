@@ -18,7 +18,7 @@ endfunction()
 
 project(ipfilter VERSION 0.0.${VERSION_BUILD})
 
-option(BUILD_BENCHMARKS "Build benchmarking suite" ON)
+# option(BUILD_BENCHMARKS "Build benchmarking suite" ON)
 
 # configure directories
 set(SOURCE_PATH "${PROJECT_SOURCE_DIR}/src")
@@ -30,64 +30,46 @@ find_package(Boost COMPONENTS unit_test_framework REQUIRED)
 # make executable file for application
 add_executable(ip_filter
     ${SOURCE_PATH}/main.cpp
-    ${SOURCE_PATH}/ipaddr.cpp
 )
-add_executable(filter_test
-    ${TEST_PATH}/filter.test.cpp
-    ${SOURCE_PATH}/ipaddr.cpp
-)
-add_executable(ipaddr_test
-    ${TEST_PATH}/ipaddr.test.cpp
-    ${SOURCE_PATH}/ipaddr.cpp
-)
+#add_executable(filter_test
+#    ${TEST_PATH}/filter.test.cpp
+#    ${SOURCE_PATH}/filter.cpp
+#)
 
-set_target_properties(ip_filter ipaddr_test filter_test PROPERTIES
+set_target_properties(ip_filter PROPERTIES
     CXX_STANDARD 14
     CXX_STANDARD_REQUIRED ON
 )
 
 # BOOST_TEST_DYN_LINK - Define this flag to link against
 # the Unit Test Framework shared library
-set_target_properties(ipaddr_test filter_test PROPERTIES
-  COMPILE_DEFINITIONS BOOST_TEST_DYN_LINK
-  INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIRS}
-)
-target_include_directories(ipaddr_test PUBLIC src)
-target_include_directories(filter_test PUBLIC src)
+#set_target_properties(filter_test PROPERTIES
+#  COMPILE_DEFINITIONS BOOST_TEST_DYN_LINK
+#  INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIRS}
+#)
+#target_include_directories(filter_test PUBLIC src)
 
-target_link_libraries(ipaddr_test
-    ${Boost_LIBRARIES}
-)
-target_link_libraries(filter_test
-    ${Boost_LIBRARIES}
-)
-
-# Copy datatest for tests and benchmarks
-file(
-    COPY
-        ${CMAKE_CURRENT_SOURCE_DIR}/tests/benchdata.tsv
-        ${CMAKE_CURRENT_SOURCE_DIR}/tests/testdata.tsv
-    DESTINATION
-        ${CMAKE_CURRENT_BINARY_DIR}
-)
+#target_link_libraries(filter_test
+#    ${Boost_LIBRARIES}
+#)
 
 # If enabled option BUILD_BENCHMARKS:
-if (BUILD_BENCHMARKS)
-    find_package(benchmark QUIET)
-    if (benchmark_FOUND)
-        message("-- Found Google benchmark library. Building benchmarks.")
-        add_executable(filter_benchmark
-            ${TEST_PATH}/filter.bench.cpp
-            ${SOURCE_PATH}/ipaddr.cpp
-        )
-        target_include_directories(filter_benchmark PUBLIC src)
-        target_link_libraries(filter_benchmark benchmark::benchmark)
-    else()
-        message("-- Failed to find Google benchmark library, disabling build of benchmarks.")
-        update_cache_variable(BUILD_BENCHMARKS OFF)
-    endif()
-    mark_as_advanced(benchmark_DIR)
-endif()
+#if (BUILD_BENCHMARKS)
+#    find_package(benchmark QUIET)
+#    if (benchmark_FOUND)
+#        message("-- Found Google benchmark library. Building benchmarks.")
+#        add_executable(filter_benchmark
+#            ${TEST_PATH}/filter.bench.cpp
+#            ${SOURCE_PATH}/ipaddr.cpp
+#        )
+#        target_include_directories(filter_benchmark PUBLIC src)
+#        target_link_libraries(filter_benchmark benchmark::benchmark)
+#    else()
+#        message("-- Failed to find Google benchmark library, disabling build of benchmarks.")
+#        update_cache_variable(BUILD_BENCHMARKS OFF)
+#    endif()
+#    mark_as_advanced(benchmark_DIR)
+#endif()
 
 install(TARGETS ip_filter RUNTIME DESTINATION bin)
 
@@ -99,11 +81,10 @@ set(CPACK_PACKAGE_CONTACT alex.aspirine@gmail.com)
 
 include(CPack)
 
-enable_testing()
+#enable_testing()
 
-add_test(IPAddr ipaddr_test)
-add_test(Filter filter_test)
+#add_test(Filter filter_test)
 
-if (BUILD_BENCHMARKS)
-    add_test(FilterBech filter_benchmark)
-endif()
+#if (BUILD_BENCHMARKS)
+#    add_test(FilterBech filter_benchmark)
+#endif()
