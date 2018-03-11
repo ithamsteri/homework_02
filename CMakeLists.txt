@@ -33,25 +33,33 @@ add_executable(ip_filter
     ${SOURCE_PATH}/filter.cpp
     ${SOURCE_PATH}/output.cpp
 )
+add_executable(output_test
+    ${TEST_PATH}/output.test.cpp
+    ${SOURCE_PATH}/output.cpp
+)
 add_executable(filter_test
     ${TEST_PATH}/filter.test.cpp
     ${SOURCE_PATH}/filter.cpp
     ${SOURCE_PATH}/output.cpp
 )
 
-set_target_properties(ip_filter filter_test PROPERTIES
+set_target_properties(ip_filter output_test filter_test PROPERTIES
     CXX_STANDARD 14
     CXX_STANDARD_REQUIRED ON
 )
 
 # BOOST_TEST_DYN_LINK - Define this flag to link against
 # the Unit Test Framework shared library
-set_target_properties(filter_test PROPERTIES
+set_target_properties(output_test filter_test PROPERTIES
   COMPILE_DEFINITIONS BOOST_TEST_DYN_LINK
   INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIRS}
 )
+target_include_directories(output_test PUBLIC src)
 target_include_directories(filter_test PUBLIC src)
 
+target_link_libraries(output_test
+    ${Boost_LIBRARIES}
+)
 target_link_libraries(filter_test
     ${Boost_LIBRARIES}
 )
@@ -86,6 +94,7 @@ include(CPack)
 
 enable_testing()
 
+add_test(Output output_test)
 add_test(Filter filter_test)
 
 #if (BUILD_BENCHMARKS)
