@@ -10,11 +10,11 @@ endif()
 # This function automates this process by getting the current help string
 # for the cache variable to update, then reinitialising it with the new
 # value, but with the original help string.
-function(update_cache_variable VAR_NAME VALUE)
-  get_property(HELP_STRING CACHE ${VAR_NAME} PROPERTY HELPSTRING)
-  get_property(VAR_TYPE CACHE ${VAR_NAME} PROPERTY TYPE)
-  set(${VAR_NAME} ${VALUE} CACHE ${VAR_TYPE} "${HELP_STRING}" FORCE)
-endfunction()
+#function(update_cache_variable VAR_NAME VALUE)
+#  get_property(HELP_STRING CACHE ${VAR_NAME} PROPERTY HELPSTRING)
+#  get_property(VAR_TYPE CACHE ${VAR_NAME} PROPERTY TYPE)
+#  set(${VAR_NAME} ${VALUE} CACHE ${VAR_TYPE} "${HELP_STRING}" FORCE)
+#endfunction()
 
 project(ipfilter VERSION 0.0.${VERSION_BUILD})
 
@@ -30,28 +30,31 @@ find_package(Boost COMPONENTS unit_test_framework REQUIRED)
 # make executable file for application
 add_executable(ip_filter
     ${SOURCE_PATH}/main.cpp
+    ${SOURCE_PATH}/filter.cpp
+    ${SOURCE_PATH}/output.cpp
 )
-#add_executable(filter_test
-#    ${TEST_PATH}/filter.test.cpp
-#    ${SOURCE_PATH}/filter.cpp
-#)
+add_executable(filter_test
+    ${TEST_PATH}/filter.test.cpp
+    ${SOURCE_PATH}/filter.cpp
+    ${SOURCE_PATH}/output.cpp
+)
 
-set_target_properties(ip_filter PROPERTIES
+set_target_properties(ip_filter filter_test PROPERTIES
     CXX_STANDARD 14
     CXX_STANDARD_REQUIRED ON
 )
 
 # BOOST_TEST_DYN_LINK - Define this flag to link against
 # the Unit Test Framework shared library
-#set_target_properties(filter_test PROPERTIES
-#  COMPILE_DEFINITIONS BOOST_TEST_DYN_LINK
-#  INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIRS}
-#)
-#target_include_directories(filter_test PUBLIC src)
+set_target_properties(filter_test PROPERTIES
+  COMPILE_DEFINITIONS BOOST_TEST_DYN_LINK
+  INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIRS}
+)
+target_include_directories(filter_test PUBLIC src)
 
-#target_link_libraries(filter_test
-#    ${Boost_LIBRARIES}
-#)
+target_link_libraries(filter_test
+    ${Boost_LIBRARIES}
+)
 
 # If enabled option BUILD_BENCHMARKS:
 #if (BUILD_BENCHMARKS)
@@ -81,9 +84,9 @@ set(CPACK_PACKAGE_CONTACT alex.aspirine@gmail.com)
 
 include(CPack)
 
-#enable_testing()
+enable_testing()
 
-#add_test(Filter filter_test)
+add_test(Filter filter_test)
 
 #if (BUILD_BENCHMARKS)
 #    add_test(FilterBech filter_benchmark)
